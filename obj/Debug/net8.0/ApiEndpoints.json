@@ -1,0 +1,28 @@
+[
+  {
+    "ContainingType": "CodeCheck.Controllers.AnalyzeController",
+    "Method": "Analyze",
+    "RelativePath": "api/Analyze",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "CodeCheck.Models.AnalyzeRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "CodeCheck.Models.AnalyzeResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  }
+]
