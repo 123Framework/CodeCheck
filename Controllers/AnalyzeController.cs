@@ -15,17 +15,14 @@ namespace CodeCheck.Controllers
         {
             _aiService = aiService;
         }
-        [HttpPost] public async Task<ActionResult<AnalyzeResponse>> Analyze([FromBody] AnalyzeRequest request)
+        [HttpPost] public async Task<ActionResult<AiStructuredResponse>> Analyze([FromBody] AnalyzeRequest request)
         {
             var result = await _aiService.AnalyzeAsync(
 
                 request.Code,
                 request.Language,
                 request.Mode);
-            return Ok(new AnalyzeResponse
-            {
-                Result = result,
-            });
+            return Ok(result);
         }
     }
 }

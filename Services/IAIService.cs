@@ -1,8 +1,11 @@
-﻿namespace CodeCheck.Services
+﻿using CodeCheck.Models;
+
+namespace CodeCheck.Services
 {
     public interface IAIService
     {
-        Task<string> AnalyzeAsync(string code, string language, string mode);
+        Task<AiStructuredResponse> AnalyzeAsync(string code, string language, string mode);
+
 
     }
 }

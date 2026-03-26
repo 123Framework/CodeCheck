@@ -15,8 +15,22 @@ namespace CodeCheck.Services
             _http = http;
             _options = options.Value;
         }
+        private string CleanJson(string content)
+        {
+            if (string.IsNullOrWhiteSpace(content))
+            {
 
-        public async Task<string> AnalyzeAsync(string code, string language, string mode)
+                return content;
+                content = content.Trim();
+                if (content.StartsWith("```"))
+                {
+                    content = content.Replace("```json", "").Replace("```", "").Trim();
+                }
+
+            }
+            return content;
+        }
+        public async Task<AiStructuredResponse> AnalyzeAsync(string code, string language, string mode)
         {
             var prompt = BuildPrompt(code, language, mode);
 
@@ -41,16 +55,39 @@ namespace CodeCheck.Services
                 "application/json"
                 );
 
+
             var response = await _http.SendAsync(request);
+            if (!response.IsSuccessStatusCode)
+            {
+                var error = await response.Content.ReadAsStringAsync();
+                throw new Exception($"Ai request failed:{error}");
+            }
             var json = await response.Content.ReadAsStringAsync();
             using var doc = JsonDocument.Parse(json);
 
-            var result = doc.RootElement.
+            var content = doc.RootElement.
                 GetProperty("choices")[0]
                 .GetProperty("message")
                 .GetProperty("content")
                 .GetString();
-            return result ?? "No response";
+
+            content = CleanJson(content!);
+
+            try
+            {
+                var structured = JsonSerializer.Deserialize<AiStructuredResponse>(content!);
+                if (structured != null && structured.Summary.StartsWith("{"))
+                {
+                    var inner = JsonSerializer.Deserialize<AiStructuredResponse>(structured.Summary);
+                    if (inner != null) { return inner; }
+                }
+                return structured ?? new AiStructuredResponse();
+
+            }
+            catch
+            {
+                return new AiStructuredResponse() { Summary = content ?? "Failed to parse Ai response" };
+            }
 
         }
 

@@ -1,4 +1,6 @@
-﻿namespace CodeCheck.Services
+﻿using CodeCheck.Models;
+
+namespace CodeCheck.Services
 {
     public class FakeService : IAIService
     {
@@ -6,6 +8,11 @@
         {
             var result = $"[FAKE AI]\nMode:{mode}\nLanguage: {language}\n\nCode length:{code.Length}";
             return Task.FromResult(result);
+        }
+
+        Task<AiStructuredResponse> IAIService.AnalyzeAsync(string code, string language, string mode)
+        {
+            throw new NotImplementedException();
         }
     }
 }
