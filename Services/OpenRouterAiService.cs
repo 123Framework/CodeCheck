@@ -18,16 +18,18 @@ namespace CodeCheck.Services
         private string CleanJson(string content)
         {
             if (string.IsNullOrWhiteSpace(content))
-            {
-
                 return content;
+            
+
+                
                 content = content.Trim();
+
                 if (content.StartsWith("```"))
                 {
                     content = content.Replace("```json", "").Replace("```", "").Trim();
                 }
 
-            }
+            
             return content;
         }
         public async Task<AiStructuredResponse> AnalyzeAsync(string code, string language, string mode)
@@ -105,13 +107,19 @@ namespace CodeCheck.Services
                 You are a senior software engineer.
 
                         Analyze the following {language} code.
-
+                        Mode: {mode}
+                    
+                    IMPORTANT:
+                    - Return ONLY VALID JSON
+                    - Do NOT INCLUDE markdown (no ```json)
+                    - Do NOT INCLUDE explanations outside JSON
                     Return ONLY valid JSON in this format:
+                   FORMAT:
                     {{
-                    ""summary"": ""short explanation"",
-                    ""issues"": [""issue1"", ""issue2""],
-                    ""improvements"": [""improvement1"", ""improvement2""],
-                    ""refactoredCode"": ""improved version of code""
+                    ""summary"": ""..."",
+                    ""issues"": [""...""],
+                    ""improvements"": [""...""],
+                    ""refactoredCode"": ""...""
                     }}
 
                     Code:
