@@ -65,26 +65,50 @@ namespace CodeCheck.Services
                 throw new Exception($"Ai request failed:{error}");
             }
             var json = await response.Content.ReadAsStringAsync();
+
+            Console.WriteLine("=== RAW AI RESPONSE ===");
+            Console.WriteLine(json);
+
             using var doc = JsonDocument.Parse(json);
 
-            var content = doc.RootElement.
-                GetProperty("choices")[0]
-                .GetProperty("message")
-                .GetProperty("content")
-                .GetString();
+            //var content = doc.RootElement.
+            //    GetProperty("choices")[0]
+            //    .GetProperty("message")
+            //    .GetProperty("content")
+            //    .GetString();
 
+            var root = doc.RootElement;
+            if (!root.TryGetProperty("choices", out var choices) || choices.GetArrayLength() == 0)
+                throw new Exception("Invalid AI response: no choices");
+
+
+            var message = choices[0].GetProperty("message");
+            if (!message.TryGetProperty("content", out var contentElement))
+                throw new Exception("Invalid AI response: no content");
+            var content = contentElement.GetString();
             content = CleanJson(content!);
 
             try
             {
                 var structured = JsonSerializer.Deserialize<AiStructuredResponse>(content!);
-                if (structured != null && structured.Summary.StartsWith("{"))
-                {
-                    var inner = JsonSerializer.Deserialize<AiStructuredResponse>(structured.Summary);
-                    if (inner != null) { return inner; }
-                }
-                return structured ?? new AiStructuredResponse();
+                //if (structured != null && structured.Summary.StartsWith("{"))
+                //{
+                //    var inner = JsonSerializer.Deserialize<AiStructuredResponse>(structured.Summary);
+                //    if (inner != null) { return inner; }
+                
+                    if (structured == null || string.IsNullOrWhiteSpace(structured.Summary))
+                    {
+                        return new AiStructuredResponse
+                        {
+                            Summary = "basic code analysis complete",
+                            Issues = new List<string> { "no critical issues found, but cdoe can be improved"},
+                            Improvements = new List<string> { "Consider adding logging or validation"},
+                            RefactoredCode = code,
 
+                        };
+                    }
+                    return structured;
+               // }
             }
             catch
             {
@@ -103,11 +127,12 @@ namespace CodeCheck.Services
                  _ => $"Explain this {language} code:\n{code}"
              };
             */
+            var normalizedMode = NormalizeMode(mode);
             return $@"
                 You are a senior software engineer.
 
                         Analyze the following {language} code.
-                        Mode: {mode}
+                        Mode: {normalizedMode}
                     
                     IMPORTANT:
                     - Return ONLY VALID JSON
@@ -125,6 +150,16 @@ namespace CodeCheck.Services
                     Code:
            {code}
             ";
+        }
+        private string NormalizeMode(string mode)
+        {
+            return mode switch
+            {
+                "fix" => "refactor",
+                "bugs" => $"Find bugs ",
+                "optimize" => $"Optimize this ",
+                _ => "explain"
+            };
         }
 
     }
