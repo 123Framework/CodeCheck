@@ -15,7 +15,7 @@
     ],
     "ReturnTypes": [
       {
-        "Type": "CodeCheck.Models.AnalyzeResponse",
+        "Type": "CodeCheck.Models.AiStructuredResponse",
         "MediaTypes": [
           "text/plain",
           "application/json",

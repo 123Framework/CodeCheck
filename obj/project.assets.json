@@ -453,11 +453,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\meysi\\source\\repos\\FitLog\\FitLog-web\\CodeCheck\\CodeCheck\\CodeCheck.csproj",
+      "projectUniqueName": "C:\\Users\\meysi\\source\\repos\\CodeCheck\\CodeCheck\\CodeCheck\\CodeCheck.csproj",
       "projectName": "CodeCheck",
-      "projectPath": "C:\\Users\\meysi\\source\\repos\\FitLog\\FitLog-web\\CodeCheck\\CodeCheck\\CodeCheck.csproj",
+      "projectPath": "C:\\Users\\meysi\\source\\repos\\CodeCheck\\CodeCheck\\CodeCheck\\CodeCheck.csproj",
       "packagesPath": "C:\\Users\\meysi\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\meysi\\source\\repos\\FitLog\\FitLog-web\\CodeCheck\\CodeCheck\\obj\\",
+      "outputPath": "C:\\Users\\meysi\\source\\repos\\CodeCheck\\CodeCheck\\CodeCheck\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

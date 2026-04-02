@@ -35,17 +35,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "$ref": "#/components/schemas/AnalyzeResponse"
+                  "$ref": "#/components/schemas/AiStructuredResponse"
                 }
               },
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AnalyzeResponse"
+                  "$ref": "#/components/schemas/AiStructuredResponse"
                 }
               },
               "text/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/AnalyzeResponse"
+                  "$ref": "#/components/schemas/AiStructuredResponse"
                 }
               }
             }
@@ -56,6 +56,34 @@
   },
   "components": {
     "schemas": {
+      "AiStructuredResponse": {
+        "type": "object",
+        "properties": {
+          "summary": {
+            "type": "string",
+            "nullable": true
+          },
+          "issues": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "improvements": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "nullable": true
+          },
+          "refactoredCode": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "AnalyzeRequest": {
         "type": "object",
         "properties": {
@@ -68,16 +96,6 @@
             "nullable": true
           },
           "mode": {
-            "type": "string",
-            "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "AnalyzeResponse": {
-        "type": "object",
-        "properties": {
-          "result": {
             "type": "string",
             "nullable": true
           }
